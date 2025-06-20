@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Urban Strike: FPS Showdown</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background: #111;
+    }
+    canvas {
+      display: block;
+    }
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-family: sans-serif;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 10;
+    }
+    #creator {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      color: white;
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 10px;
+    }
+    #share-buttons {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    #share-buttons a {
+      color: white;
+      margin: 0 5px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="info">
+    <strong>Urban Strike: FPS Showdown</strong><br/>
+    🎮 Move: WASD | Look: Mouse | Shoot: Click<br/>
+    Mobile: Drag to look + Tap to shoot
+  </div>
+  <div id="creator">🎮 Created by <strong>SH NAFIZ</strong></div>
+  <div id="share-buttons">
+    📢 Share this game:
+    <a href="https://www.facebook.com/sharer/sharer.php?u=YOUR_POST_URL" target="_blank">Facebook</a>
+    <a href="https://twitter.com/intent/tweet?text=Play+Urban+Strike+FPS+Game+Now+Free:+YOUR_POST_URL" target="_blank">Twitter</a>
+    <a href="https://www.reddit.com/submit?url=YOUR_POST_URL&title=Play+Urban+Strike+FPS+Online+Now!" target="_blank">Reddit</a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/examples/js/controls/PointerLockControls.js"></script>
+  <script>
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    let renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    let controls = new THREE.PointerLockControls(camera, document.body);
+    document.addEventListener('click', () => controls.lock());
+    scene.add(controls.getObject());
+
+    let light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(0, 10, 5);
+    scene.add(light);
+
+    let floorGeometry = new THREE.PlaneGeometry(100, 100);
+    let floorMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+    let floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
+
+    let enemies = [];
+    for (let i = 0; i < 5; i++) {
+      let box = new THREE.Mesh(
+        new THREE.BoxGeometry(1, 2, 1),
+        new THREE.MeshStandardMaterial({ color: 0xff0000 })
+      );
+      box.position.set(Math.random()*20-10, 1, Math.random()*20-10);
+      scene.add(box);
+      enemies.push(box);
+    }
+
+    camera.position.y = 1.6;
+
+    function shoot() {
+      let raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera({ x: 0, y: 0 }, camera);
+      let hits = raycaster.intersectObjects(enemies);
+      if (hits.length > 0) {
+        scene.remove(hits[0].object);
+        enemies = enemies.filter(e => e !== hits[0].object);
+        new Audio("https://cdn.pixabay.com/download/audio/2023/03/21/audio_f4ad59aaf3.mp3?filename=laser-shot-144252.mp3").play();
+      }
+    }
+
+    window.addEventListener('click', shoot);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
