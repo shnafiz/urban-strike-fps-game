@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Urban Strike FPS</title>
+  <style>
+    body { margin:0; overflow:hidden; background:#111; color:white; font-family:sans-serif; }
+    .instructions {
+      position:absolute; top:10px; left:10px;
+      background:rgba(0,0,0,0.7); padding:10px 20px; border-radius:8px; font-size:14px;
+    }
+    .credit {
+      position:absolute; bottom:10px; right:10px;
+      background:rgba(0,0,0,0.6); padding:6px 16px; border-radius:8px; font-size:14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="instructions">
+    <strong>Urban Strike FPS</strong><br/>
+    🎮 Move: WASD | Look: Mouse | Shoot: Click
+  </div>
+  <div class="credit">
+    🎮 Created by SH NAFIZ
+  </div>
+
+  <!-- Use CDN for Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
